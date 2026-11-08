@@ -1,86 +1,51 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>10.0.0</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{966362bf-0170-4195-aa0d-0dbfbb0b4bce}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <RootNamespace>CampusParks</RootNamespace>
-    <AssemblyName>CampusParks</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <LangVersion>default</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>True</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>False</Optimize>
-    <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <ConsolePause>False</ConsolePause>
-    <CodeAnalysisRuleSet>CampusParks.ruleset</CodeAnalysisRuleSet>
-    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>none</DebugType>
-    <Optimize>True</Optimize>
-    <OutputPath>bin\Release</OutputPath>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <ConsolePause>False</ConsolePause>
-    <DefineConstants>TRACE</DefineConstants>
-    <CodeAnalysisRuleSet>CampusParks.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <ItemGroup>
-    <None Include="CampusParks.ruleset" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-      <HintPath>C:\Games\Steam\steamapps\common\Cities_Skylines\Cities_Data\Managed\mscorlib.dll</HintPath>
-    </Reference>
-    <Reference Include="System">
-      <HintPath>D:\SteamLibrary\SteamApps\common\Cities_Skylines\Cities_Data\Managed\System.dll</HintPath>
-    </Reference>
-    <Reference Include="Assembly-CSharp">
-      <HintPath>D:\SteamLibrary\SteamApps\common\Cities_Skylines\Cities_Data\Managed\Assembly-CSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="ICities">
-      <HintPath>D:\SteamLibrary\SteamApps\common\Cities_Skylines\Cities_Data\Managed\ICities.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Xml, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-      <HintPath>C:\Games\Steam\steamapps\common\Cities_Skylines\Cities_Data\Managed\System.Xml.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine">
-      <HintPath>D:\SteamLibrary\SteamApps\common\Cities_Skylines\Cities_Data\Managed\UnityEngine.dll</HintPath>
-    </Reference>
-    <Reference Include="ColossalManaged">
-      <HintPath>D:\SteamLibrary\SteamApps\common\Cities_Skylines\Cities_Data\Managed\ColossalManaged.dll</HintPath>
-    </Reference>
-    <Reference Include="CitiesHarmony.API">
-      <HintPath>..\packages\CitiesHarmony.API.2.0.0\lib\net35\CitiesHarmony.API.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="CitiesHarmony.Harmony">
-      <HintPath>..\packages\CitiesHarmony.Harmony.2.0.4\lib\net35\CitiesHarmony.Harmony.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="LoadingExtension.cs" />
-    <Compile Include="CampusParksMod.cs" />
-    <Compile Include="ParkBuildingAIPatch.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="packages.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>if not exist "$(LOCALAPPDATA)\Colossal Order\Cities_Skylines\Addons\Mods\$(ProjectName)" mkdir "$(LOCALAPPDATA)\Colossal Order\Cities_Skylines\Addons\Mods\$(ProjectName)"
-xcopy /y "$(TargetPath)" "$(LOCALAPPDATA)\Colossal Order\Cities_Skylines\Addons\Mods\$(ProjectName)"
-xcopy /y "$(SolutionDir)\packages\CitiesHarmony.API.2.0.0\lib\net35\CitiesHarmony.API.dll" "$(LOCALAPPDATA)\Colossal Order\Cities_Skylines\Addons\Mods\$(ProjectName)"</PostBuildEvent>
-  </PropertyGroup>
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net35</TargetFramework>
+		<Deterministic>false</Deterministic>
+		<AssemblyTitle>CampusParks</AssemblyTitle>
+		<AssemblyVersion>1.0.*</AssemblyVersion>
+		<GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
+		<LangVersion>preview</LangVersion>
+		<AssemblyName>CampusParks</AssemblyName>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<DebugType>none</DebugType>
+		<DebugSymbols>false</DebugSymbols>
+		<CodeAnalysisRuleSet />
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <CodeAnalysisRuleSet />
+	</PropertyGroup>
+	<Target Name="DeployToModDirectory" AfterTargets="Build">
+		<PropertyGroup>
+			<ModDirectory>$(LOCALAPPDATA)\Colossal Order\Cities_Skylines\Addons\Mods\$(ProjectName)\</ModDirectory>
+		</PropertyGroup>
+		<ItemGroup>
+			<ModFiles Include="$(TargetDir)*.*" />
+		</ItemGroup>
+		<RemoveDir Directories="$(ModDirectory)" />
+		<Copy SourceFiles="@(ModFiles)" DestinationFolder="$(ModDirectory)" />
+	</Target>
+	<ItemGroup>
+		<PackageReference Include="CitiesHarmony.API" Version="2.2.0" />
+	</ItemGroup>
+	<ItemGroup>
+		<Reference Include="Assembly-CSharp">
+			<HintPath>..\..\..\..\Program Files (x86)\Steam\steamapps\common\Cities_Skylines\Cities_Data\Managed\Assembly-CSharp.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="ColossalManaged">
+			<HintPath>..\..\..\..\Program Files (x86)\Steam\steamapps\common\Cities_Skylines\Cities_Data\Managed\ColossalManaged.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="ICities">
+			<HintPath>..\..\..\..\Program Files (x86)\Steam\steamapps\common\Cities_Skylines\Cities_Data\Managed\ICities.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="UnityEngine">
+			<HintPath>..\..\..\..\Program Files (x86)\Steam\steamapps\common\Cities_Skylines\Cities_Data\Managed\UnityEngine.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+	</ItemGroup>
 </Project>
