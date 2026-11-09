@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -10,18 +11,18 @@ namespace CampusParks.HarmonyPatches
     {
         private static IEnumerable<MethodBase> TargetMethods()
         {
-            yield return AccessTools.Method(typeof(ParkBuildingAI), nameof(ParkBuildingAI.CreateBuilding));
-            yield return AccessTools.Method(typeof(ParkBuildingAI), nameof(ParkBuildingAI.BuildingLoaded));
-            yield return AccessTools.Method(typeof(ParkBuildingAI), nameof(ParkBuildingAI.ReleaseBuilding));
-            yield return AccessTools.Method(typeof(ParkBuildingAI), nameof(ParkBuildingAI.BeginRelocating));
-            yield return AccessTools.Method(typeof(ParkBuildingAI), nameof(ParkBuildingAI.EndRelocating));
-            yield return AccessTools.Method(typeof(ParkBuildingAI), nameof(ParkBuildingAI.ParkAreaChanged));
-            yield return AccessTools.Method(typeof(ParkBuildingAI), nameof(ParkBuildingAI.CheckBuildPosition));
-            yield return AccessTools.Method(typeof(ParkBuildingAI), nameof(ParkBuildingAI.CheckRoadAccess));
-            yield return AccessTools.Method(typeof(ParkBuildingAI), "FindRoadAccess");
-            yield return AccessTools.Method(typeof(ParkBuildingAI), "HandleCrime");
-            yield return AccessTools.Method(typeof(ParkBuildingAI), "HandleCommonConsumption");
-            yield return AccessTools.Method(typeof(ParkBuildingAI), "HandleDead2");
+            yield return ParkMethod(nameof(ParkBuildingAI.CreateBuilding));
+            yield return ParkMethod(nameof(ParkBuildingAI.BuildingLoaded));
+            yield return ParkMethod(nameof(ParkBuildingAI.ReleaseBuilding));
+            yield return ParkMethod(nameof(ParkBuildingAI.BeginRelocating));
+            yield return ParkMethod(nameof(ParkBuildingAI.EndRelocating));
+            yield return ParkMethod(nameof(ParkBuildingAI.ParkAreaChanged));
+            yield return ParkMethod(nameof(ParkBuildingAI.CheckBuildPosition));
+            yield return ParkMethod(nameof(ParkBuildingAI.CheckRoadAccess));
+            yield return ParkMethod("FindRoadAccess");
+            yield return ParkMethod("HandleCrime");
+            yield return ParkMethod("HandleCommonConsumption");
+            yield return ParkMethod("HandleDead2");
         }
 
         [HarmonyTranspiler]
@@ -41,6 +42,12 @@ namespace CampusParks.HarmonyPatches
                     yield return instruction;
                 }
             }
+        }
+
+        private static MethodBase ParkMethod(string name)
+        {
+            var method = AccessTools.DeclaredMethod(typeof(ParkBuildingAI), name) ?? throw new Exception($"ParkBuildingAI does not declare or override: {name}");
+            return method;
         }
 
         private static bool IsPark(ref DistrictPark park)
